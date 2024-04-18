@@ -1,9 +1,9 @@
 {
-    "Identifier": "",
-    "Slug": "",
-    "Status": "",
-    "Title": "",
-    "Description": "",
+    "Identifier": "eos6ost",
+    "Slug": "reinvent4-libinvent",
+    "Status": "In progress",
+    "Title": "REINVENT 4 LibInvent",
+    "Description": "REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.",
     "Mode": "",
     "Task": [],
     "Input": [],
@@ -12,8 +12,8 @@
     "Output Type": [],
     "Output Shape": "",
     "Interpretation": "",
-    "Tag": [],
-    "Publication": "",
-    "Source Code": "",
-    "License": ""
+    "Tag": "Similarity",
+    "Publication": "https://chemrxiv.org/engage/chemrxiv/article-details/65463cafc573f893f1cae33a",
+    "Source Code": "https://github.com/MolecularAI/REINVENT4",
+    "License": "Apache-2.0"
 }
