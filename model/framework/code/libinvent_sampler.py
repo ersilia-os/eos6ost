@@ -14,6 +14,7 @@ from utils import (
     filter_out_duplicate_molecules,
     pad_smiles,
     make_list_into_lists_of_n,
+    SamplingResult,
 )
 
 
@@ -71,15 +72,17 @@ class LibinventSampler:
 
         return annotated, unannotated
 
-    def sample(self, input_smiles: "list[str]", batch_size: "int|None"):
+    def sample(
+        self, input_smiles: "list[str]", batch_size: "int|None" = None
+    ) -> SamplingResult:
         with torch.no_grad():
-            sampler = self.get_sampler()
+            sampler = self.get_sampler(batch_size)
             sampled = sampler.sample(input_smiles)
 
         sampled = filter_valid(sampled)
         sampled = filter_out_duplicate_molecules(sampled, is_debug=self.is_debug)
 
-        return sampled.items1, sampled.smiles
+        return SamplingResult(sampled.items1, sampled.smilies)
 
     def generate(
         self, input_smiles: "list[str]"
@@ -97,8 +100,12 @@ class LibinventSampler:
             click.echo(f"Total input smiles: {num_input_smiles}")
 
         annotated, unannotated = self.annotated_and_unannotated_smiles(input_smiles)
+        annotated_sampled = self.sample(annotated)
 
-        print("Anno", annotated, "Unanno", unannotated)
+        print(
+            "Anno",
+            annotated_sampled.input,
+        )
         # end_time = time.time()
 
         # if self.is_debug:
