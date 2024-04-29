@@ -9,7 +9,7 @@ from reinvent.chemistry import TransformationTokens, Conversions
 from reinvent.chemistry.library_design import BondMaker, AttachmentPoints
 from reinvent.runmodes.samplers.run_sampling import filter_valid
 
-
+from unannotated_smiles import UnannotatedSmiles
 from utils import (
     filter_out_duplicate_molecules,
     pad_smiles,
@@ -23,7 +23,7 @@ class LibinventSampler:
     CHECKPOINT = os.path.join(ROOT, "..", "..", "checkpoints")
     LIBINVENT_MODEL = os.path.realpath(os.path.join(CHECKPOINT, "libinvent.prior"))
 
-    def __init__(self, batch_size, is_debug=False):
+    def __init__(self, batch_size: int, is_debug=False):
         self.is_debug = is_debug
         self.batch_size = batch_size
         self.chemistry = ChemistryHelpers(
@@ -100,46 +100,49 @@ class LibinventSampler:
             click.echo(f"Total input smiles: {num_input_smiles}")
 
         annotated, unannotated = self.annotated_and_unannotated_smiles(input_smiles)
-        annotated_sampled = self.sample(annotated)
+        result = self.sample(annotated)
+        unannotated = UnannotatedSmiles(unannotated, self.batch_size, self.is_debug)
+        result_2 = unannotated.generate(self.sample)
+        result.append(result_2)
 
-        print(
-            "Anno",
-            annotated_sampled.input,
+        end_time = time.time()
+
+        if self.is_debug:
+            click.echo(
+                click.style(
+                    f"Time taken in seconds: {int(end_time - start_time)}",
+                    fg="green",
+                )
+            )
+
+        flatten_outputs = pad_smiles(
+            result, input_smiles=input_smiles, target_length=self.batch_size
         )
-        # end_time = time.time()
 
-        # if self.is_debug:
-        #     click.echo(
-        #         click.style(
-        #             f"Time taken in seconds: {int(end_time - start_time)}",
-        #             fg="green",
-        #         )
-        #     )
+        output_smiles = make_list_into_lists_of_n(flatten_outputs, num_input_smiles)
+        log = {}
 
-        # total_smiles = len(sampled.smilies)
+        if self.is_debug:
+            total_smiles = 0
+            expected_num_smiles = num_input_smiles * self.batch_size
 
-        # expected_num_smiles = self.batch_size * num_input_smiles
+            for smile in flatten_outputs:
+                if smile != "":
+                    total_smiles += 1
 
-        # if self.is_debug:
-        #     click.echo(
-        #         click.style(
-        #             f"Total unique smiles generated: {total_smiles}, Expected: {expected_num_smiles}, Loss: {expected_num_smiles - total_smiles}",
-        #             fg="green",
-        #         )
-        #     )
+            click.echo(
+                click.style(
+                    f"Total unique smiles generated: {total_smiles}, Expected: {expected_num_smiles}, Loss: {expected_num_smiles - total_smiles}",
+                    fg="green",
+                )
+            )
 
-        # flatten_outputs = pad_smiles(
-        #     sampled, input_smiles=input_smiles, target_length=self.batch_size
-        # )
+            log = {
+                "start": start_time,
+                "end": end_time,
+                "input_smiles": input_smiles,
+                "total": total_smiles,
+                "expected": expected_num_smiles,
+            }
 
-        # output_smiles = make_list_into_lists_of_n(flatten_outputs, num_input_smiles)
-
-        # log = {
-        #     "start": start_time,
-        #     "end": end_time,
-        #     "input_smiles": input_smiles,
-        #     "total": total_smiles,
-        #     "expected": expected_num_smiles,
-        # }
-
-        # return (output_smiles, flatten_outputs, log)
+        return (output_smiles, flatten_outputs, log)

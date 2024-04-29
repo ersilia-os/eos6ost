@@ -103,7 +103,7 @@ def pad_smiles(
     pads the output with empty strings to match the target_length.
     """
 
-    output_smiles: dict[list[str]] = {}
+    output_smiles: dict[str, list[str]] = {}
 
     # Initialize output_smiles with empty lists for each input smile
     output_smiles = {smile: [] for smile in input_smiles}
@@ -112,9 +112,9 @@ def pad_smiles(
     similar_smiles = {}
 
     # Populate output_smiles with sampled smiles
-    for idx, seq in enumerate(sampled.items1):
+    for idx, seq in enumerate(sampled.input):
         if seq in output_smiles:
-            output_smiles[seq].append(sampled.smilies[idx])
+            output_smiles[seq].append(sampled.output[idx])
         else:
             # REINVENT4 do some modification in the input smiles. Like if the
             # input smile is `CC(=O)Oc1ccccc1C(O)=O` then it will convert it
@@ -122,12 +122,12 @@ def pad_smiles(
             # strings are not same. This else condition will take care of this
             # edge case.
             if seq in similar_smiles:
-                output_smiles[similar_smiles[seq]].append(sampled.smilies[idx])
+                output_smiles[similar_smiles[seq]].append(sampled.output[idx])
             else:
                 # Try to find similar smiles in input_smiles.
                 for smile in input_smiles:
                     if are_smiles_same(smile, seq):
-                        output_smiles[smile].append(sampled.smilies[idx])
+                        output_smiles[smile].append(sampled.output[idx])
                         similar_smiles[seq] = smile
                         break
 
@@ -135,7 +135,7 @@ def pad_smiles(
 
     # Construct the output list
     for smile in input_smiles:
-        output_smile = output_smiles[smile]
+        output_smile = output_smiles[smile][:target_length]
         output_smile_length = len(output_smile)
         if output_smile_length == target_length:
             output.extend(output_smile)
@@ -270,7 +270,8 @@ def filter_duplicate_molecules(molecules):
     return filtered_list
 
 
-def get_all_comb_of_mol_with_attachment_points(mol):
+def get_comb_of_mol_with_attachment_points(smile):
+    mol = get_mol(smile)
     scaffold, at = get_scaffold_and_attachment_points(mol)
 
     if len(at) > 5:
@@ -291,7 +292,7 @@ def get_all_comb_of_mol_with_attachment_points(mol):
         for current_at in comb:
             s = Chem.Mol(scaffold)
             m = get_mol_after_adding_attachment_points_at(s, current_at)
-            m = attach_num_to_attachment_points(m)
+            # m = attach_num_to_attachment_points(m)
             molecules_list[attachment_point].append(m)
 
         attachment_point += 1
@@ -316,10 +317,3 @@ def print_details(combinations):
                 out[t] = [s]
         attachment_points += 1
     print(out)
-
-
-print_details(
-    get_all_comb_of_mol_with_attachment_points(
-        get_mol("COC1=CC23CCCN2CCc2cc4c(cc2C3C1O)OCO4")
-    )
-)
