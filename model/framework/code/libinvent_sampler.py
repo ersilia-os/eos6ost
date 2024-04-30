@@ -123,7 +123,14 @@ class LibinventSampler:
         )
 
         output_smiles = make_list_into_lists_of_n(flatten_outputs, num_input_smiles)
-        log = {}
+
+        log = {
+            "start": 0,
+            "end": 0,
+            "input_smiles": input_smiles,
+            "total": 0,
+            "expected": 0,
+        }
 
         if self.is_debug:
             total_smiles = 0

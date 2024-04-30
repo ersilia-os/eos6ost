@@ -49,14 +49,6 @@ if is_debug:
 outputs, _, log_libinvent = libinvent_sampler.generate(input_smiles=input_smiles)
 
 
-log = {
-    "start": log_libinvent["start"],
-    "end": log_libinvent["end"],
-    "input_smiles": log_libinvent["input_smiles"],
-    "total": log_libinvent["total"],
-    "expected": batch_size * num_input_smiles,
-}
-
 input_len = len(input_smiles)
 output_len = len(outputs)
 
@@ -73,5 +65,13 @@ with open(output_file, "w", newline="") as fp:
 
 
 if is_debug:
+    log = {
+        "start": log_libinvent["start"],
+        "end": log_libinvent["end"],
+        "input_smiles": log_libinvent["input_smiles"],
+        "total": log_libinvent["total"],
+        "expected": batch_size * num_input_smiles,
+    }
+
     with open(os.path.abspath(log_file), "w", newline="\n") as fp:
         json.dump(log, fp)
