@@ -75,6 +75,9 @@ class LibinventSampler:
     def sample(
         self, input_smiles: "list[str]", batch_size: "int|None" = None
     ) -> SamplingResult:
+        if len(input_smiles) == 0:
+            return SamplingResult([], [])
+
         with torch.no_grad():
             sampler = self.get_sampler(batch_size)
             sampled = sampler.sample(input_smiles)
