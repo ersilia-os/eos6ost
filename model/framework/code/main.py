@@ -44,7 +44,7 @@ if not os.path.exists(os.path.dirname(os.path.abspath(output_file))):
 libinvent_sampler = LibinventSampler(batch_size=batch_size, is_debug=is_debug)
 
 if is_debug:
-    click.echo(click.style("Running libinvent fold prior", fg="white", bg="green"))
+    click.echo(click.style("Running libinvent prior", fg="white", bg="green"))
 
 outputs, _, log_libinvent = libinvent_sampler.generate(input_smiles=input_smiles)
 
