@@ -25,6 +25,7 @@ REINVENT 4 LibInvent creates new molecules by appending R groups to a given inpu
 
 ## Ersilia model URLs
 * [GitHub](https://github.com/ersilia-os/eos6ost)
+* [AWS S3](https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip)
 
 ## Citation
 
