@@ -12,6 +12,7 @@ RUN git clone --branch v4.2.6 --single-branch https://github.com/MolecularAI/REI
 
 # Install the package using pip
 RUN pip install ./REINVENT4 --extra-index-url=https://pypi.anaconda.org/OpenEye/simple --extra-index-url=https://download.pytorch.org/whl/cu113
+RUN conda install -c conda-forge xorg-libxrender xorg-libxtst
 
 WORKDIR /repo
 COPY . /repo
