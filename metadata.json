@@ -1,7 +1,7 @@
 {
     "Identifier": "eos6ost",
     "Slug": "reinvent4-libinvent",
-    "Status": "In progress",
+    "Status": "Ready",
     "Title": "REINVENT 4 LibInvent",
     "Description": "REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.",
     "Mode": "Pretrained",
