@@ -54,7 +54,7 @@ output_len = len(outputs)
 
 assert input_len == output_len
 
-HEADER = ["smiles_{0}".format(str(x).zfill(3)) for x in range(batch_size)]
+HEADER = ["mol_{0}".format(str(x).zfill(3)) for x in range(batch_size)]
 
 with open(output_file, "w", newline="") as fp:
     csv_writer = csv.writer(fp)
