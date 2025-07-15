@@ -3,21 +3,18 @@
     "Slug": "reinvent4-libinvent",
     "Status": "Ready",
     "Title": "REINVENT 4 LibInvent",
-    "Description": "REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.\n",
+    "Description": "REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.",
+    "Deployment": [
+        "Local"
+    ],
     "Source": "Local",
     "Source Type": "External",
+    "Task": "Sampling",
+    "Subtask": "Generation",
     "Input": [
         "Compound"
     ],
     "Input Dimension": 1,
-    "Task": "Sampling",
-    "Subtask": "Generation",
-    "Biomedical Area": [
-        "Any"
-    ],
-    "Target Organism": [
-        "Not Applicable"
-    ],
     "Output": [
         "Compound"
     ],
@@ -27,19 +24,22 @@
     "Tag": [
         "Similarity"
     ],
-    "Publication": "https://chemrxiv.org/engage/chemrxiv/article-details/65463cafc573f893f1cae33a",
+    "Biomedical Area": [
+        "Any"
+    ],
+    "Target Organism": [
+        "Not Applicable"
+    ],
     "Publication Type": "Preprint",
     "Publication Year": 2023,
+    "Publication": "https://chemrxiv.org/engage/chemrxiv/article-details/65463cafc573f893f1cae33a",
     "Source Code": "https://github.com/MolecularAI/REINVENT4",
     "License": "Apache-2.0",
     "Contributor": "ankitskvmdam",
     "Incorporation Date": "2024-04-18",
+    "S3": "https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip",
     "DockerHub": "https://hub.docker.com/r/ersiliaos/eos6ost",
     "Docker Architecture": [
         "AMD64"
-    ],
-    "S3": "https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip",
-    "Deployment": [
-        "Local"
     ]
 }
