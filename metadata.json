@@ -41,5 +41,7 @@
     "DockerHub": "https://hub.docker.com/r/ersiliaos/eos6ost",
     "Docker Architecture": [
         "AMD64"
-    ]
+    ],
+    "Model Size": 176.0,
+    "Environment Size": 8356.0
 }
