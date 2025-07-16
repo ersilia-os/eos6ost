@@ -4,6 +4,7 @@ REINVENT 4 LibInvent creates new molecules by appending R groups to a given inpu
 
 This model was incorporated on 2024-04-18.
 
+
 ## Information
 ### Identifiers
 - **Ersilia Identifier:** `eos6ost`
@@ -13,7 +14,7 @@ This model was incorporated on 2024-04-18.
 - **Task:** `Sampling`
 - **Subtask:** `Generation`
 - **Biomedical Area:** `Any`
-- **Target Organism:** `Not Applicable`
+- **Target Organism:** `Any`
 - **Tags:** `Similarity`
 
 ### Input
