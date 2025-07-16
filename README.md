@@ -2,8 +2,7 @@
 
 REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.
 
-This model was incorporated on 2024-04-18.
-
+This model was incorporated on 2024-04-18.Last packaged on 2025-07-16.
 
 ## Information
 ### Identifiers
@@ -51,7 +50,12 @@ _10 of 1000 columns are shown_
 ### Resource Consumption
 - **Model Size (Mb):** `176`
 - **Environment Size (Mb):** `8349`
+- **Image Size (Mb):** `8463.22`
 
+**Computational Performance (seconds):**
+- 10 inputs: `112.46`
+- 100 inputs: `-1`
+- 10000 inputs: `-1`
 
 ### References
 - **Source Code**: [https://github.com/MolecularAI/REINVENT4](https://github.com/MolecularAI/REINVENT4)
