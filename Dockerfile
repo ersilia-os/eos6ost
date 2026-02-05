@@ -3,22 +3,23 @@ MAINTAINER ersilia
 
 RUN python -m pip install --upgrade pip
 
-RUN pip install torch==2.9.1 --index-url https://download.pytorch.org/whl/cpu
-RUN pip install torchvision==0.24.1 --index-url https://download.pytorch.org/whl/cpu
+RUN pip install torch==1.12.1+cpu --index-url https://download.pytorch.org/whl/cpu
+RUN pip install torchvision==0.13.1+cpu --index-url https://download.pytorch.org/whl/cpu
 
+RUN pip install OpenEye-toolkits>=2022 --extra-index-url https://pypi.anaconda.org/OpenEye/simple
 RUN pip install chemprop==1.5.2 --extra-index-url https://pypi.anaconda.org/OpenEye/simple
 RUN pip install descriptastorus==2.8.0
-RUN pip install funcy==2.0
+RUN pip install funcy==1.18
 RUN pip install matplotlib==3.8.4
 RUN pip install mmpdb==2.1
 RUN pip install MolVS==0.1.1
 RUN pip install numpy==1.26.4
-RUN pip install pandas==2.2.2
+RUN pip install pandas==1.5.3
 RUN pip install polars==1.37.1
-RUN pip install Pillow==10.4.0
+RUN pip install Pillow==9.5.0
 RUN pip install pumas==1.3.0
-RUN pip install pydantic==2.11.0
-RUN pip install pytest==8.2.2
+RUN pip install pydantic==1.10.26
+RUN pip install pytest==7.4.4
 RUN pip install pytest-mock==3.14.0
 RUN pip install python-dotenv==1.0.1
 RUN pip install PyYAML==6.0.2
