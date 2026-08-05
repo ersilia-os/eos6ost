@@ -2,7 +2,7 @@
 
 REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.
 
-This model was incorporated on 2024-04-18.Last packaged on 2025-11-20.
+This model was incorporated on 2024-04-18.Last packaged on 2026-08-05.
 
 ## Information
 ### Identifiers
@@ -44,16 +44,16 @@ _10 of 1000 columns are shown_
 - **Source:** `Local`
 - **Source Type:** `External`
 - **DockerHub**: [https://hub.docker.com/r/ersiliaos/eos6ost](https://hub.docker.com/r/ersiliaos/eos6ost)
-- **Docker Architecture:** `AMD64`
+- **Docker Architecture:** `AMD64`, `ARM64`
 - **S3 Storage**: [https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip](https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip)
 
 ### Resource Consumption
 - **Model Size (Mb):** `176`
 - **Environment Size (Mb):** `2363`
-- **Image Size (Mb):** `10034.84`
+- **Image Size (Mb):** `2619.28`
 
 **Computational Performance (seconds):**
-- 10 inputs: `110.26`
+- 10 inputs: `115.82`
 - 100 inputs: `-1`
 - 10000 inputs: `-1`
 
