@@ -1,6 +1,6 @@
 # REINVENT 4 LibInvent
 
-REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.
+Decorates a molecular scaffold with R groups, returning up to 1,000 elaborated structures. When the input SMILES marks attachment points, LibInvent works from them directly; otherwise, positions are chosen automatically. The generator is part of REINVENT 4, an openly licensed framework from AstraZeneca that gathers common generative algorithms behind a single command-line interface. Output is sampled rather than enumerated exhaustively, so runs are not reproducible and coverage of the possible R-group space is partial.
 
 This model was incorporated on 2024-04-18.Last packaged on 2026-08-05.
 
@@ -23,7 +23,7 @@ This model was incorporated on 2024-04-18.Last packaged on 2026-08-05.
 ### Output
 - **Output Dimension:** `1000`
 - **Output Consistency:** `Variable`
-- **Interpretation:** Model generates up to 1000 similar molecules per input molecule.
+- **Interpretation:** Up to 1000 generated molecules produced by decorating the input scaffold with R groups.
 
 Below are the **Output Columns** of the model:
 | Name | Type | Direction | Description |
@@ -61,7 +61,7 @@ _10 of 1000 columns are shown_
 - **Source Code**: [https://github.com/MolecularAI/REINVENT4](https://github.com/MolecularAI/REINVENT4)
 - **Publication**: [https://doi.org/10.1186/s13321-024-00812-5](https://doi.org/10.1186/s13321-024-00812-5)
 - **Publication Type:** `Peer reviewed`
-- **Publication Year:** `2023`
+- **Publication Year:** `2024`
 - **Ersilia Contributor:** [ankitskvmdam](https://github.com/ankitskvmdam)
 
 ### License
