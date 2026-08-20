@@ -3,7 +3,7 @@
     "Slug": "reinvent4-libinvent",
     "Status": "Ready",
     "Title": "REINVENT 4 LibInvent",
-    "Description": "Decorates a molecular scaffold with R groups, returning up to 1,000 elaborated structures. When the input SMILES marks attachment points, LibInvent works from them directly; otherwise, positions are chosen automatically. The generator is part of REINVENT 4, an openly licensed framework from AstraZeneca that gathers common generative algorithms behind a single command-line interface. Output is sampled rather than enumerated exhaustively, so runs are not reproducible and coverage of the possible R-group space is partial.",
+    "Description": "REINVENT 4 LibInvent creates new molecules by appending R groups to a given input. If the input SMILES string contains specified attachment points, it is directly processed by LibInvent to generate new molecules. If no attachment points given, the model try to find potential attachment points, and iterates through different combinations of these points. It passes each combination to LibInvent to generate new molecules.",
     "Deployment": [
         "Local"
     ],
@@ -20,7 +20,7 @@
     ],
     "Output Dimension": 1000,
     "Output Consistency": "Variable",
-    "Interpretation": "Up to 1000 generated molecules produced by decorating the input scaffold with R groups.",
+    "Interpretation": "Model generates up to 1000 similar molecules per input molecule.",
     "Tag": [
         "Similarity"
     ],
