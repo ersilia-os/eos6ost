@@ -5,9 +5,25 @@ import csv
 import json
 
 import click
+from rdkit import Chem
 from reinvent.config_parse import read_smiles_csv_file
 
 from libinvent_sampler import LibinventSampler
+
+
+def strip_atom_maps(smi):
+    # REINVENT4's bond-making step leaves attachment-point atom-map numbers
+    # (e.g. "[CH3:0]") on every generated SMILES; confirmed these are present in
+    # 100% of outputs. They're not canonical and break naive exact-match
+    # deduplication/registration downstream, so clear them before writing.
+    if not smi:
+        return smi
+    mol = Chem.MolFromSmiles(smi)
+    if mol is None:
+        return smi
+    for atom in mol.GetAtoms():
+        atom.SetAtomMapNum(0)
+    return Chem.MolToSmiles(mol)
 
 # parse arguments
 input_file = sys.argv[1]
@@ -53,6 +69,28 @@ input_len = len(input_smiles)
 output_len = len(outputs)
 
 assert input_len == output_len
+
+outputs = [[strip_atom_maps(s) for s in row] for row in outputs]
+
+# stripping atom maps can collapse two previously-distinct-looking outputs (e.g. differing
+# only in which attachment point got which map number) onto the same canonical structure;
+# confirmed empirically this reintroduces a small number of duplicates (~2% in one row of
+# the shipped examples) that the sampler's own pre-stripping dedup couldn't have caught.
+# Dedupe again here and pad any shortfall, rather than backfilling by re-generating.
+def dedupe_and_pad(row, target):
+    seen = set()
+    deduped = []
+    for s in row:
+        if not s:
+            continue
+        if s in seen:
+            continue
+        seen.add(s)
+        deduped.append(s)
+    deduped = deduped[:target]
+    return deduped + [""] * (target - len(deduped))
+
+outputs = [dedupe_and_pad(row, batch_size) for row in outputs]
 
 HEADER = ["smi_{0}".format(str(x).zfill(3)) for x in range(batch_size)]
 

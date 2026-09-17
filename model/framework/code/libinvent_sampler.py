@@ -52,7 +52,7 @@ class LibinventSampler:
             sample_strategy=self.sample_strategy,
             isomeric=self.isomeric,
             randomize_smiles=self.randomize_smiles,
-            unique_sequences=self,
+            unique_sequences=self.unique_sequences,
             chemistry=self.chemistry,
             temperature=self.temperature,
             tokens=self.tokens,
