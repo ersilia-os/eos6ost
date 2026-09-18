@@ -2,7 +2,7 @@
 
 REINVENT 4 LibInvent decorates a molecules Murcko scaffold with new R-groups. The input is reduced to its scaffold before generation, discarding its own substituents, stereochemistry and functional groups; if no attachment points are specified, the model finds them on free scaffold carbons and iterates through combinations of one to three.
 
-This model was incorporated on 2024-04-18.Last packaged on 2026-08-05.
+This model was incorporated on 2024-04-18.Last packaged on 2026-09-18.
 
 ## Information
 ### Identifiers
@@ -50,10 +50,10 @@ _10 of 1000 columns are shown_
 ### Resource Consumption
 - **Model Size (Mb):** `176`
 - **Environment Size (Mb):** `2366`
-- **Image Size (Mb):** `2619.28`
+- **Image Size (Mb):** `2606.01`
 
 **Computational Performance (seconds):**
-- 10 inputs: `115.82`
+- 10 inputs: `112.01`
 - 100 inputs: `-1`
 - 10000 inputs: `-1`
 
