@@ -25,6 +25,26 @@ def strip_atom_maps(smi):
         atom.SetAtomMapNum(0)
     return Chem.MolToSmiles(mol)
 
+
+def drop_input(row, input_smi):
+    # The input molecule must never be returned as one of its own "generated" outputs
+    # (LibInvent regrows the original molecule from its own scaffold for some inputs:
+    # 4/100 compounds in the 100-compound benchmark). Compared without stereochemistry,
+    # so a stereo-stripped copy of the input is caught too. An annotated scaffold input
+    # (contains "*") can never equal a complete output, so it is left alone.
+    input_mol = Chem.MolFromSmiles(input_smi)
+    if input_mol is None:
+        return row
+    input_flat = Chem.MolToSmiles(input_mol, isomericSmiles=False)
+    kept = []
+    for s in row:
+        if s:
+            mol = Chem.MolFromSmiles(s)
+            if mol is not None and Chem.MolToSmiles(mol, isomericSmiles=False) == input_flat:
+                continue
+        kept.append(s)
+    return kept
+
 # parse arguments
 input_file = sys.argv[1]
 output_file = sys.argv[2]
@@ -71,6 +91,10 @@ output_len = len(outputs)
 assert input_len == output_len
 
 outputs = [[strip_atom_maps(s) for s in row] for row in outputs]
+
+# drop the input molecule itself from its own row; any shortfall is padded by
+# dedupe_and_pad below, like the other post-filters here (no backfill by re-generating)
+outputs = [drop_input(row, smi) for row, smi in zip(outputs, input_smiles)]
 
 # stripping atom maps can collapse two previously-distinct-looking outputs (e.g. differing
 # only in which attachment point got which map number) onto the same canonical structure;
