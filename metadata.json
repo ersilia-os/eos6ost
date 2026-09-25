@@ -38,7 +38,7 @@
     "Contributor": "ankitskvmdam",
     "Incorporation Date": "2024-04-18",
     "Last Packaging Date": "2026-09-24",
-    "Release": "v2.0.0",
+    "Release": "v3.0.0",
     "S3": "https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip",
     "DockerHub": "https://hub.docker.com/r/ersiliaos/eos6ost",
     "Docker Architecture": [
