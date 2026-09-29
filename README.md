@@ -2,7 +2,7 @@
 
 REINVENT 4 LibInvent decorates a molecules Murcko scaffold with new R-groups. The input is reduced to its scaffold before generation, discarding its own substituents, stereochemistry and functional groups; if no attachment points are specified, the model finds them on free scaffold carbons and iterates through combinations of one to three.
 
-This model was incorporated on 2024-04-18.Last packaged on 2026-09-24.
+This model was incorporated on 2024-04-18.Last packaged on 2026-09-29.
 
 ## Information
 ### Identifiers
@@ -44,17 +44,17 @@ _10 of 100 columns are shown_
 - **Source:** `Local`
 - **Source Type:** `External`
 - **DockerHub**: [https://hub.docker.com/r/ersiliaos/eos6ost](https://hub.docker.com/r/ersiliaos/eos6ost)
-- **Docker Architecture:** `AMD64`, `ARM64`
+- **Docker Architecture:** `AMD64`
 - **S3 Storage**: [https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip](https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip)
 
 ### Resource Consumption
 - **Model Size (Mb):** `175`
 - **Environment Size (Mb):** `2367`
-- **Image Size (Mb):** `2606.07`
+- **Image Size (Mb):** `2521.33`
 
 **Computational Performance (seconds):**
-- 10 inputs: `88.69`
-- 100 inputs: `-1`
+- 10 inputs: `37.98`
+- 100 inputs: `1024.41`
 - 10000 inputs: `-1`
 
 ### References
