@@ -57,7 +57,7 @@ is_debug = sys.argv[3] == "True" if len(sys.argv) > 3 else False
 # Only write if `is_debug` is True.
 log_file = output_file + ".json"
 
-batch_size = 1000
+batch_size = 100
 num_input_smiles = 0
 input_smiles = None
 
@@ -116,7 +116,7 @@ def dedupe_and_pad(row, target):
 
 outputs = [dedupe_and_pad(row, batch_size) for row in outputs]
 
-HEADER = ["smi_{0}".format(str(x).zfill(3)) for x in range(batch_size)]
+HEADER = ["smi_{0}".format(str(x).zfill(2)) for x in range(batch_size)]
 
 with open(output_file, "w", newline="") as fp:
     csv_writer = csv.writer(fp)

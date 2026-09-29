@@ -239,7 +239,7 @@ def attach_num_to_attachment_points(mol):
 
 
 def get_target_num_mols_for_given_mol(
-    attachment_points_using, total_combinations, target=1000
+    attachment_points_using, total_combinations, target=100
 ):
     target_for_current_mol = target // total_combinations
 
