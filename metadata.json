@@ -37,20 +37,17 @@
     "License": "Apache-2.0",
     "Contributor": "ankitskvmdam",
     "Incorporation Date": "2024-04-18",
-    "Last Packaging Date": "2026-09-24",
+    "Last Packaging Date": "2026-09-29",
     "Release": "v3.0.0",
     "S3": "https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip",
     "DockerHub": "https://hub.docker.com/r/ersiliaos/eos6ost",
-    "Docker Architecture": [
-        "AMD64",
-        "ARM64"
-    ],
+    "Docker Architecture": "AMD64",
     "Model Size": 175.0,
     "Environment Size": 2367.0,
-    "Image Size": 2606.07,
-    "Computational Performance 1": 88.69,
-    "Computational Performance 2": 729.22,
-    "Computational Performance 3": -1.0,
+    "Image Size": 2521.33,
+    "Computational Performance 1": 37.98,
+    "Computational Performance 2": 107.22,
+    "Computational Performance 3": 1024.41,
     "Computational Performance 4": -1.0,
     "Computational Performance 5": -1.0
 }
