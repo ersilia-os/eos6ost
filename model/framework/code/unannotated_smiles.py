@@ -1,18 +1,12 @@
 import sys
-from typing import Callable, TypedDict
+from typing import Callable
 
 from utils import (
     SamplingResult,
     get_comb_of_mol_with_attachment_points,
     get_target_num_mols_for_given_mol,
     get_smiles,
-    are_smiles_same,
 )
-
-
-class AnnotatedSmilesDict(TypedDict):
-    root: str
-    mol: str
 
 
 class UnannotatedSmiles:
@@ -22,8 +16,8 @@ class UnannotatedSmiles:
         self.input_smiles = input_smile
         self.is_debug = is_debug
         self.result: "dict[str, list[str]]" = {}
-        self.annotated_smiles_with_batch_size: "dict[str, list[AnnotatedSmilesDict]]" = {}
-        self.annotation_to_root_map: "dict[str, str]" = {}
+        # per input: the number of molecules to draw -> the scaffolds drawn with that number
+        self.scaffolds_with_batch_size: "dict[str, dict[int, list[str]]]" = {}
 
         for smile in self.input_smiles:
             try:
@@ -60,27 +54,7 @@ class UnannotatedSmiles:
 
                 attachment_points += 1
 
-            for batch_size, molecules in molecules_with_batch_size.items():
-                entries: "list[AnnotatedSmilesDict]" = [
-                    {"root": smile, "mol": mol} for mol in molecules
-                ]
-
-                if batch_size in self.annotated_smiles_with_batch_size:
-                    self.annotated_smiles_with_batch_size[batch_size].extend(entries)
-                else:
-                    self.annotated_smiles_with_batch_size[batch_size] = entries
-
-    def find_root(
-        self, molecules: "list[AnnotatedSmilesDict]", smile: str
-    ) -> str | bool:
-        if smile in self.annotation_to_root_map:
-            return self.annotation_to_root_map[smile]
-
-        for mol in molecules:
-            if are_smiles_same(smile, mol["mol"]):
-                self.annotation_to_root_map[smile] = mol["root"]
-                return self.annotation_to_root_map[smile]
-        return False
+            self.scaffolds_with_batch_size[smile] = molecules_with_batch_size
 
     def get_result(self) -> SamplingResult:
         inputs = []
@@ -96,22 +70,12 @@ class UnannotatedSmiles:
     def generate(
         self, sample: Callable[[list[str], int], SamplingResult]
     ) -> SamplingResult:
-        for batch_size, molecules in self.annotated_smiles_with_batch_size.items():
-            batch = int(batch_size)
-            mols = [d["mol"] for d in molecules]
-            sampled = sample(mols, batch)
-
-            for mol, res in zip(sampled.input, sampled.output):
-                root = self.find_root(molecules, mol)
-
-                if root is False:
-                    if self.is_debug:
-                        print(f"unable to find root for {mol}")
-                    continue
-
-                if root in self.result:
-                    self.result[root].append(res)
-                else:
-                    self.result[root] = [res]
+        # Every input is sampled on its own. When the scaffolds of all inputs shared a call, the
+        # outputs were credited to the first input whose scaffold matched, so two inputs of a file
+        # with the same scaffold got all the outputs for the first and an empty row for the second.
+        for root, groups in self.scaffolds_with_batch_size.items():
+            for batch_size, mols in groups.items():
+                sampled = sample(mols, int(batch_size))
+                self.result.setdefault(root, []).extend(sampled.output)
 
         return self.get_result()
