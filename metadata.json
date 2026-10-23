@@ -20,7 +20,7 @@
     ],
     "Output Dimension": 100,
     "Output Consistency": "Variable",
-    "Interpretation": "100 molecules built by decorating the input's Murcko scaffold with R-groups, so its own substituents are lost.",
+    "Interpretation": "100 molecules built by decorating the inputs Murcko scaffold with R-groups, so its own substituents are lost.",
     "Tag": [
         "Compound generation"
     ],
