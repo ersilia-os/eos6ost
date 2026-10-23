@@ -181,6 +181,24 @@ def get_scaffold(mol):
     return MurckoScaffold.GetScaffoldForMol(mol)
 
 
+def remove_stereo(mol):
+    """Return a copy of the molecule without stereochemistry, keeping the atom order.
+
+    A stereocentre written as [C@H] carries an explicit hydrogen, so bonding an attachment
+    point to it gives valence 5 and the SMILES round trip fails. The scaffold vocabulary of
+    LibInvent has no stereo tokens, so nothing the model uses is lost.
+    """
+    mol = Chem.Mol(mol)
+    for atom in mol.GetAtoms():
+        if atom.GetChiralTag() != Chem.ChiralType.CHI_UNSPECIFIED:
+            atom.SetChiralTag(Chem.ChiralType.CHI_UNSPECIFIED)
+            atom.SetNumExplicitHs(0)
+            atom.SetNoImplicit(False)
+    Chem.RemoveStereochemistry(mol)
+    mol.UpdatePropertyCache(strict=False)
+    return mol
+
+
 def get_idxs_of_carbon_for_new_bond(mol):
     """Return indices of all carbon atoms available for new bond.
 
@@ -206,6 +224,8 @@ def get_scaffold_and_attachment_points(mol):
     if Chem.MolToSmiles(scaffold) == "":
         # If we have a valid scaffold then we are using it.
         scaffold = Chem.Mol(mol)
+
+    scaffold = remove_stereo(scaffold)
 
     return (scaffold, get_idxs_of_carbon_for_new_bond(scaffold))
 
@@ -265,7 +285,12 @@ def filter_duplicate_molecules(molecules):
         if m in seen:
             continue
         seen[m] = m
-        filtered_list.append(get_mol(m))
+        mol = get_mol(m)
+        if mol is None:
+            # a variant RDKit cannot read back (e.g. an attachment point that breaks a valence)
+            # is skipped instead of crashing the whole call
+            continue
+        filtered_list.append(mol)
 
     return filtered_list
 

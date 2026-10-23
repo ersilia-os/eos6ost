@@ -82,7 +82,32 @@ libinvent_sampler = LibinventSampler(batch_size=batch_size, is_debug=is_debug)
 if is_debug:
     click.echo(click.style("Running libinvent prior", fg="white", bg="green"))
 
-outputs, _, log_libinvent = libinvent_sampler.generate(input_smiles=input_smiles)
+try:
+    outputs, _, log_libinvent = libinvent_sampler.generate(input_smiles=input_smiles)
+except Exception as e:
+    # One failing input must not take the others down: redo the inputs one at a time,
+    # an input that still fails gets an empty row.
+    print(
+        f"[ERROR] {type(e).__name__}: {e}; retrying one input at a time", file=sys.stderr
+    )
+    outputs = []
+    for smi in input_smiles:
+        try:
+            rows, _, _ = libinvent_sampler.generate(input_smiles=[smi])
+            outputs.append(rows[0])
+        except Exception as e_single:
+            print(
+                f"[ERROR] {smi!r}: {type(e_single).__name__}: {e_single}",
+                file=sys.stderr,
+            )
+            outputs.append([""] * batch_size)
+    log_libinvent = {
+        "start": 0,
+        "end": 0,
+        "input_smiles": input_smiles,
+        "total": 0,
+        "expected": 0,
+    }
 
 
 input_len = len(input_smiles)

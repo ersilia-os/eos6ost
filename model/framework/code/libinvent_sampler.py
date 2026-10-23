@@ -1,4 +1,5 @@
 import os
+import sys
 import time
 
 import click
@@ -72,20 +73,73 @@ class LibinventSampler:
 
         return annotated, unannotated
 
-    def sample(
-        self, input_smiles: "list[str]", batch_size: "int|None" = None
-    ) -> SamplingResult:
-        if len(input_smiles) == 0:
-            return SamplingResult([], [])
+    def can_encode(self, sampler, scaffold: str) -> bool:
+        """Whether the scaffold vocabulary of LibInvent can represent the scaffold.
 
+        REINVENT silently drops a scaffold that has a token outside its vocabulary
+        (phosphorus, selenium, a protonated nitrogen, ...) and raises an AssertionError
+        when none is left, which used to take down the whole input file. The scaffold is
+        tokenised the way REINVENT does it (randomised, attachment numbers removed).
+        """
+        vocabulary = self.libinvent_agent.get_vocabulary()
+        try:
+            randomized = sampler._get_randomized_smiles([scaffold])[0]
+            clean = self.chemistry.attachment_points.remove_attachment_point_numbers(
+                randomized
+            )
+            tokens = vocabulary.scaffold_tokenizer.tokenize(clean)
+            return vocabulary.scaffold_vocabulary.encode(tokens) is not None
+        except Exception:
+            return False
+
+    def sample_group(self, sampler, input_smiles: "list[str]") -> SamplingResult:
         with torch.no_grad():
-            sampler = self.get_sampler(batch_size)
             sampled = sampler.sample(input_smiles)
 
         sampled = filter_valid(sampled)
         sampled = filter_out_duplicate_molecules(sampled, is_debug=self.is_debug)
 
         return SamplingResult(sampled.items1, sampled.smilies)
+
+    def sample(
+        self, input_smiles: "list[str]", batch_size: "int|None" = None
+    ) -> SamplingResult:
+        if len(input_smiles) == 0:
+            return SamplingResult([], [])
+
+        sampler = self.get_sampler(batch_size)
+        encodable = [s for s in input_smiles if self.can_encode(sampler, s)]
+        if len(encodable) < len(input_smiles):
+            print(
+                f"[WARN] skipped {len(input_smiles) - len(encodable)} of "
+                f"{len(input_smiles)} scaffolds the model cannot represent",
+                file=sys.stderr,
+            )
+        input_smiles = encodable
+        if len(input_smiles) == 0:
+            return SamplingResult([], [])
+
+        try:
+            return self.sample_group(sampler, input_smiles)
+        except Exception as e:
+            # A scaffold the model chokes on must not blank the other scaffolds of the group:
+            # redo them one at a time and skip the failing ones.
+            print(
+                f"[ERROR] sampling a group of {len(input_smiles)} scaffolds failed "
+                f"({type(e).__name__}: {e}); retrying one at a time",
+                file=sys.stderr,
+            )
+            result = SamplingResult([], [])
+            for scaffold in input_smiles:
+                try:
+                    result.append(self.sample_group(sampler, [scaffold]))
+                except Exception as e_single:
+                    print(
+                        f"[ERROR] no outputs for scaffold {scaffold!r}: "
+                        f"{type(e_single).__name__}: {e_single}",
+                        file=sys.stderr,
+                    )
+            return result
 
     def generate(
         self, input_smiles: "list[str]"

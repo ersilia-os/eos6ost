@@ -1,3 +1,4 @@
+import sys
 from typing import Callable, TypedDict
 
 from utils import (
@@ -25,7 +26,15 @@ class UnannotatedSmiles:
         self.annotation_to_root_map: "dict[str, str]" = {}
 
         for smile in self.input_smiles:
-            combinations = get_comb_of_mol_with_attachment_points((smile))
+            try:
+                combinations = get_comb_of_mol_with_attachment_points((smile))
+            except Exception as e:
+                # e.g. a SMILES RDKit cannot read: this input gets an empty row, the others go on
+                print(
+                    f"[ERROR] no scaffold for {smile!r}: {type(e).__name__}: {e}",
+                    file=sys.stderr,
+                )
+                continue
             total_combinations = sum([len(comb) for comb in combinations])
 
             attachment_points = 1
