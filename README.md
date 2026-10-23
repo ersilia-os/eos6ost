@@ -2,7 +2,7 @@
 
 Grows new R-groups onto a scaffold instead of editing a whole molecule. An input that already carries attachment points is decorated directly; otherwise it is reduced to its Murcko scaffold, discarding substituents, stereochemistry and functional groups, and attachment points are enumerated on free scaffold carbons in combinations of one to three. The RNN generator, shipped with REINVENT 4 and pre-trained on ChEMBL 27, is fed a randomised SMILES each run, so the 100 structures returned vary between runs and need not resemble the query.
 
-This model was incorporated on 2024-04-18.Last packaged on 2026-09-29.
+This model was incorporated on 2024-04-18.Last packaged on 2026-10-23.
 
 ## Information
 ### Identifiers
@@ -44,17 +44,17 @@ _10 of 100 columns are shown_
 - **Source:** `Local`
 - **Source Type:** `External`
 - **DockerHub**: [https://hub.docker.com/r/ersiliaos/eos6ost](https://hub.docker.com/r/ersiliaos/eos6ost)
-- **Docker Architecture:** `AMD64`
+- **Docker Architecture:** `AMD64`, `ARM64`
 - **S3 Storage**: [https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip](https://ersilia-models-zipped.s3.eu-central-1.amazonaws.com/eos6ost.zip)
 
 ### Resource Consumption
 - **Model Size (Mb):** `175`
 - **Environment Size (Mb):** `2367`
-- **Image Size (Mb):** `2521.33`
+- **Image Size (Mb):** `2528.37`
 
 **Computational Performance (seconds):**
-- 10 inputs: `37.98`
-- 100 inputs: `1024.41`
+- 10 inputs: `31.59`
+- 100 inputs: `342.54`
 - 10000 inputs: `-1`
 
 ### References
