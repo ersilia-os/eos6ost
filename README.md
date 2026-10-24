@@ -2,7 +2,7 @@
 
 Grows new R-groups onto a scaffold instead of editing a whole molecule. An input that already carries attachment points is decorated directly; otherwise it is reduced to its Murcko scaffold, discarding substituents, stereochemistry and functional groups, and attachment points are enumerated on free scaffold carbons in combinations of one to three. The RNN generator, shipped with REINVENT 4 and pre-trained on ChEMBL 27, is fed a randomised SMILES each run, so the 100 structures returned vary between runs and need not resemble the query.
 
-This model was incorporated on 2024-04-18.Last packaged on 2026-10-23.
+This model was incorporated on 2024-04-18.Last packaged on 2026-10-24.
 
 ## Information
 ### Identifiers
@@ -53,8 +53,8 @@ _10 of 100 columns are shown_
 - **Image Size (Mb):** `2528.37`
 
 **Computational Performance (seconds):**
-- 10 inputs: `37.04`
-- 100 inputs: `948.76`
+- 10 inputs: `38.23`
+- 100 inputs: `960.37`
 - 10000 inputs: `-1`
 
 ### References
