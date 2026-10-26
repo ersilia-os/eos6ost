@@ -23,7 +23,7 @@ This model was incorporated on 2024-04-18.Last packaged on 2026-10-24.
 ### Output
 - **Output Dimension:** `100`
 - **Output Consistency:** `Variable`
-- **Interpretation:** Up to 100 molecules built by decorating the inputs Murcko scaffold with R-groups, so its own substituents are lost.
+- **Interpretation:** Up to 100 molecules built by decorating the scaffold of the input with R-groups, so the substituents of the input are lost. Most similar to the input first.
 
 Below are the **Output Columns** of the model:
 | Name | Type | Direction | Description |
