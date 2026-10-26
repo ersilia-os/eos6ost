@@ -1,6 +1,6 @@
 # REINVENT 4 LibInvent
 
-Grows new R-groups onto a scaffold instead of editing a whole molecule. An input that already carries attachment points is decorated directly; otherwise it is reduced to its Murcko scaffold, discarding substituents, stereochemistry and functional groups, and attachment points are enumerated on free scaffold carbons in combinations of one to three. The RNN generator, shipped with REINVENT 4 and pre-trained on ChEMBL 27, is fed a randomised SMILES each run, so the 100 structures returned vary between runs and need not resemble the query.
+Grows new R-groups onto a scaffold instead of editing a whole molecule. An input that already carries attachment points is decorated directly; otherwise it is reduced to its Murcko scaffold, discarding substituents, stereochemistry and functional groups, and attachment points are enumerated on free scaffold carbons in combinations of one to three. The RNN generator, shipped with REINVENT 4 and pre-trained on ChEMBL 27, is fed a randomised SMILES each run, so the structures returned (up to 100) vary between runs and need not resemble the query.
 
 This model was incorporated on 2024-04-18.Last packaged on 2026-10-24.
 

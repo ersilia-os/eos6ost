@@ -5,7 +5,8 @@ import csv
 import json
 
 import click
-from rdkit import Chem
+from rdkit import Chem, DataStructs
+from rdkit.Chem import rdFingerprintGenerator
 from reinvent.config_parse import read_smiles_csv_file
 
 from libinvent_sampler import LibinventSampler
@@ -44,6 +45,29 @@ def drop_input(row, input_smi):
                 continue
         kept.append(s)
     return kept
+
+def sort_by_similarity(row, input_smi):
+    # Most similar to the input first: Tanimoto on Morgan fingerprints (radius 2, 2048 bits)
+    # between each output and the whole input. Ties break on the SMILES so the order is
+    # reproducible. REINVENT returns the molecules in sampling order, which carries no
+    # meaning. Empty cells stay at the end. For an annotated scaffold input (contains "*")
+    # the similarity is to that scaffold.
+    filled = [s for s in row if s]
+    input_mol = Chem.MolFromSmiles(input_smi)
+    if input_mol is None or not filled:
+        return row
+    gen = rdFingerprintGenerator.GetMorganGenerator(radius=2, fpSize=2048)
+    input_fp = gen.GetFingerprint(input_mol)
+
+    def similarity(smi):
+        mol = Chem.MolFromSmiles(smi)
+        if mol is None:
+            return -1.0
+        return DataStructs.TanimotoSimilarity(input_fp, gen.GetFingerprint(mol))
+
+    ordered = sorted(filled, key=lambda smi: (-similarity(smi), smi))
+    return ordered + [""] * (len(row) - len(ordered))
+
 
 # parse arguments
 input_file = sys.argv[1]
@@ -140,6 +164,20 @@ def dedupe_and_pad(row, target):
     return deduped + [""] * (target - len(deduped))
 
 outputs = [dedupe_and_pad(row, batch_size) for row in outputs]
+
+# last step, once the (up to) 100 molecules of every row are final: order each row by similarity
+# to its input. A sorting problem must never cost the row, which then stays unsorted.
+sorted_outputs = []
+for row, smi in zip(outputs, input_smiles):
+    try:
+        row = sort_by_similarity(row, smi)
+    except Exception as e:
+        print(
+            f"[WARN] could not sort the outputs of {smi!r}: {type(e).__name__}: {e}",
+            file=sys.stderr,
+        )
+    sorted_outputs.append(row)
+outputs = sorted_outputs
 
 HEADER = ["smi_{0}".format(str(x).zfill(2)) for x in range(batch_size)]
 
